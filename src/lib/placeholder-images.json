@@ -1,0 +1,82 @@
+{
+  "placeholderImages": [
+    {
+      "id": "product-1",
+      "description": "Unique Ultra Detergent Powder",
+      "imageUrl": "https://images.unsplash.com/photo-1760537436392-5fe6e02fc6de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkZXRlcmdlbnQlMjBwb3dkZXJ8ZW58MHx8fHwxNzYzOTYxMzI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "detergent powder"
+    },
+    {
+      "id": "product-2",
+      "description": "Dishwash Liquid - Shine",
+      "imageUrl": "https://images.unsplash.com/photo-1680092628751-c4a503ed5858?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkaXNod2FzaCUyMGxpcXVpZHxlbnwwfHx8fDE3NjM5NjEzMjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dishwash liquid"
+    },
+    {
+      "id": "product-3",
+      "description": "Floor Cleaner - Fresh",
+      "imageUrl": "https://images.unsplash.com/photo-1762500824903-0f96b202e8f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmbG9vciUyMGNsZWFuZXJ8ZW58MHx8fHwxNzYzOTYxMzI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "floor cleaner"
+    },
+    {
+      "id": "product-4",
+      "description": "Glass Cleaner - Streak Free",
+      "imageUrl": "https://images.unsplash.com/photo-1716625300720-b34970a2d890?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnbGFzcyUyMGNsZWFuZXJ8ZW58MHx8fHwxNzYzOTYxMzI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glass cleaner"
+    },
+    {
+      "id": "product-5",
+      "description": "Toilet Cleaner - Power Action",
+      "imageUrl": "https://images.unsplash.com/photo-1678924133506-7508daa13c7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dG9pbGV0JTIwY2xlYW5lcnxlbnwwfHx8fDE3NjM5NjEzMjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "toilet cleaner"
+    },
+    {
+      "id": "product-6",
+      "description": "Multi-Surface Cleaner",
+      "imageUrl": "https://images.unsplash.com/photo-1563453392212-9a3c9b775973?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjbGVhbmluZyUyMHN1cHBsaWVzfGVufDB8fHx8MTc2NTU0NTAzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "surface cleaner"
+    },
+    {
+      "id": "login-hero",
+      "description": "Login page hero image",
+      "imageUrl": "https://images.unsplash.com/photo-1740914994657-f1cdffdc418e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3YXJlaG91c2UlMjBsb2dpc3RpY3N8ZW58MHx8fHwxNzYzOTA0Mjk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "warehouse logistics"
+    },
+    {
+      "id": "reward-ac-window",
+      "description": "Window AC",
+      "imageUrl": "https://images.unsplash.com/photo-1667983453881-4992fe86ab1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3NjQyNzQxMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    },
+    {
+      "id": "reward-ac-split",
+      "description": "Split AC",
+      "imageUrl": "https://images.unsplash.com/photo-1552853160-8ec65527b252?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhaXIlMjBjb25kaXRpb25lcnxlbnwwfHx8fDE3NjQyNzQxMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "air conditioner"
+    },
+    {
+      "id": "reward-motorcycle",
+      "description": "Motorcycle",
+      "imageUrl": "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb3RvcmN5Y2xlfGVufDB8fHx8MTc2NDMxMDUyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "motorcycle"
+    },
+    {
+      "id": "reward-geyser",
+      "description": "Water Geyser",
+      "imageUrl": "https://images.unsplash.com/photo-1615238168577-0970b17e4a5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3YXRlciUyMGhlYXRlcnxlbnwwfHx8fDE3NjQzMTA1MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "water heater"
+    },
+    {
+      "id": "reward-laptop",
+      "description": "Laptop",
+      "imageUrl": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsYXB0b3B8ZW58MHx8fHwxNzY0MjgyNjE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "laptop"
+    },
+    {
+      "id": "reward-soap",
+      "description": "Soap",
+      "imageUrl": "https://images.unsplash.com/photo-1605265058749-78af14a1be2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzb2FwfGVufDB8fHx8MTc2NDI4MjU4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "soap"
+    }
+  ]
+}
