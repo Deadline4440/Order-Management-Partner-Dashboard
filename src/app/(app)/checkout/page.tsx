@@ -160,9 +160,10 @@ export default function CheckoutPage() {
             <p className="text-lg font-semibold">
               Your cart is empty.
             </p>
-            <p className="text-muted-foreground">
-              You can&apos;t proceed to checkout without any items.
-            </p>
+           <p className="text-muted-foreground">
+  You can&apos;t proceed to checkout without any items.
+</p>
+
           </CardContent>
         </Card>
       )}
