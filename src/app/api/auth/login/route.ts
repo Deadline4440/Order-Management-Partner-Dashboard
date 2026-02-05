@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
 
     // Send OTP via SMS
     const phoneWithCountryCode = body.phone.startsWith("+") ? body.phone : `+91${body.phone}`;
-    const smsSent = await sendOtpSMS(phoneWithCountryCode, otp);
+    await sendOtpSMS(phoneWithCountryCode, otp);
+
 
     // Log OTP in development
     console.log(`🔐 [LOGIN OTP] ${otp} for ${body.phone}`);
