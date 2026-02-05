@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendWelcomeEmail } from "@/lib/email";
 import { generateToken } from "@/lib/jwt";
@@ -8,7 +8,7 @@ interface VerifyOTPRequest {
   otp: string;
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const body: VerifyOTPRequest = await request.json();
 

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateToken } from "@/lib/jwt";
 
@@ -7,7 +7,7 @@ interface VerifyLoginOTPRequest {
   otp: string;
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() { {
   try {
     const body: VerifyLoginOTPRequest = await request.json();
 

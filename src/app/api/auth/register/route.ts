@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendOTPEmail, sendSMSOTP } from "@/lib/email";
 
@@ -25,7 +25,7 @@ function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const body: RegisterRequest = await request.json();
 
