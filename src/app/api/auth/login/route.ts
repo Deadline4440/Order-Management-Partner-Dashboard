@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { generateToken } from "@/lib/jwt";
+import { db } from "@/lib/db"
 import { sendOtpSMS } from "@/lib/send-sms";
 
 interface LoginRequest {
