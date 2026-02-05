@@ -1,4 +1,6 @@
-import { config } from 'dotenv';
-config();
+// src/ai/dev.ts
 
-import '@/ai/flows/personalized-product-recommendations.ts';
+import 'server-only';
+
+// This file is only for local / server initialization
+import '@/ai/flows/personalized-product-recommendations';
