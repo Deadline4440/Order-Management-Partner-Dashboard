@@ -11,6 +11,8 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import 'server-only'
+
 
 const ProductRecommendationsInputSchema = z.object({
   partnerId: z.string().describe('The ID of the UCW partner.'),
