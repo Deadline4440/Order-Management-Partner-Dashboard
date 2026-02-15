@@ -14,8 +14,7 @@ import {
   Settings,
   ShoppingCart,
   Gift,
-  CreditCard,
-  Home
+  CreditCard
 } from "lucide-react";
 
 import {
@@ -76,8 +75,8 @@ export function Header() {
               href="/dashboard"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <Home className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Dashboard</span>
+              <DayalLogo className="h-5 w-5 transition-all group-hover:scale-110" />
+              <span className="sr-only">My Order</span>
             </Link>
             {navItems.map((item) => (
               <Link
