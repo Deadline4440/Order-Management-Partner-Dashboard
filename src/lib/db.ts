@@ -60,25 +60,42 @@ export const db = {
     return usersDB.get(email) || null;
   },
 
+  // Normalize identifiers (phone numbers or emails) to a consistent key
+  _normalizeIdentifier: (id: string) => {
+    if (!id) return id;
+    const s = id.trim();
+    if (s.includes("@")) return s.toLowerCase();
+    // phone: remove all non-digit characters
+    const digits = s.replace(/\D/g, "");
+    // If digits longer than 10 (country code present), assume last 10 digits are local number
+    if (digits.length > 10) return digits.slice(-10);
+    return digits;
+  },
+
   getUserByPhone: async (phone: string): Promise<User | null> => {
+    const norm = db._normalizeIdentifier(phone || "");
     for (const user of usersDB.values()) {
-      if (user.phone === phone) return user;
+      const userPhoneNorm = db._normalizeIdentifier(user.phone || "");
+      if (userPhoneNorm && userPhoneNorm === norm) return user;
     }
     return null;
   },
 
   getTempUserByPhone: async (phone: string): Promise<User | null> => {
-    return tempRegistrationsDB.get(`temp_${phone}`) || null;
+    const norm = db._normalizeIdentifier(phone || "");
+    return tempRegistrationsDB.get(`temp_${norm}`) || null;
   },
 
   saveTempUser: async (phone: string, userData: User): Promise<void> => {
-    tempRegistrationsDB.set(`temp_${phone}`, userData);
+    const norm = db._normalizeIdentifier(phone || "");
+    tempRegistrationsDB.set(`temp_${norm}`, userData);
   },
 
   // OTP operations
   saveOTP: async (phone: string, otp: string, method: "sms" | "email"): Promise<void> => {
-    console.log("💾 Saving OTP:", { phone, otp, method });
-    otpDB.set(phone, {
+    const norm = db._normalizeIdentifier(phone || "");
+    console.log("💾 Saving OTP:", { phone: norm, otp, method });
+    otpDB.set(norm, {
       code: otp,
       expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
       method,
@@ -88,24 +105,26 @@ export const db = {
   },
 
   getOTP: async (phone: string): Promise<OTPRecord | null> => {
-    const record = otpDB.get(phone);
+    const norm = db._normalizeIdentifier(phone || "");
+    const record = otpDB.get(norm);
     if (!record) return null;
     if (Date.now() > record.expiresAt) {
-      otpDB.delete(phone);
+      otpDB.delete(norm);
       return null;
     }
     return record;
   },
 
   verifyOTP: async (phone: string, otp: string): Promise<boolean> => {
-    console.log("📱 Verifying OTP for phone:", phone);
+    const norm = db._normalizeIdentifier(phone || "");
+    console.log("📱 Verifying OTP for:", norm);
     console.log("💾 Available OTPs in DB:", Array.from(otpDB.keys()));
     
-    const record = await db.getOTP(phone);
+    const record = await db.getOTP(norm);
     console.log("📋 OTP Record Found:", !!record);
     
     if (!record) {
-      console.log("❌ No OTP record found for:", phone);
+      console.log("❌ No OTP record found for:", norm);
       return false;
     }
     
@@ -115,18 +134,19 @@ export const db = {
       record.attempts++;
       console.log("❌ OTP mismatch. Attempts:", record.attempts);
       if (record.attempts >= 3) {
-        otpDB.delete(phone);
+        otpDB.delete(norm);
         console.log("🔐 Too many attempts, OTP deleted");
         return false;
       }
       return false;
     }
     console.log("✅ OTP verified successfully");
-    otpDB.delete(phone);
+    otpDB.delete(norm);
     return true;
   },
 
   deleteOTP: async (phone: string): Promise<void> => {
-    otpDB.delete(phone);
+    const norm = db._normalizeIdentifier(phone || "");
+    otpDB.delete(norm);
   },
 };

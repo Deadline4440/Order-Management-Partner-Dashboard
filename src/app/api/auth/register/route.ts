@@ -1,110 +1,87 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendOTPEmail, sendSMSOTP } from "@/lib/email";
+import { sendOtpSMS } from "@/lib/send-sms";
+import { sendOtpEmail } from "@/lib/send-email";
 
-interface RegisterRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  otpMethod: "sms" | "email";
-}
-
-// Hash password (use bcrypt in production)
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-// Generate a random 6-digit OTP
-function generateOTP(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-export async function POST() {
+export async function POST(req: Request) {
   try {
-    const body: RegisterRequest = await request.json();
+    const { name, phone, email, method } = await req.json();
 
-    // Validate required fields
-    if (!body.firstName || !body.lastName || !body.email || !body.phone || !body.password) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    if (!name || (!phone && !email)) {
+      return NextResponse.json({ error: "Name and phone or email are required" }, { status: 400 });
     }
 
-    // Validate email format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
-      return NextResponse.json(
-        { error: "Invalid email format" },
-        { status: 400 }
-      );
-    }
+    const identifier = phone || email; // use phone if present else email
 
-    // Check if email already exists
-    const existingEmail = await db.getUserByEmail(body.email);
-    if (existingEmail) {
-      return NextResponse.json(
-        { error: "Email already registered" },
-        { status: 409 }
-      );
-    }
-
-    // Check if phone already exists
-    const existingPhone = await db.getUserByPhone(body.phone);
-    if (existingPhone) {
-      return NextResponse.json(
-        { error: "Phone number already registered" },
-        { status: 409 }
-      );
-    }
-
-    // Hash password
-    const hashedPassword = await hashPassword(body.password);
-
-    // Generate OTP
-    const otp = generateOTP();
-
-    // Save OTP
-    console.log("📱 Register: Saving OTP for phone:", body.phone);
-    await db.saveOTP(body.phone, otp, body.otpMethod);
-
-    // Save temporary user data
-    await db.saveTempUser(body.phone, {
-      id: `temp_${body.phone}`,
-      firstName: body.firstName,
-      lastName: body.lastName,
-      email: body.email,
-      phone: body.phone,
-      password: hashedPassword,
+    const tempUser = {
+      id: `temp_${identifier}`,
+      firstName: name,
+      lastName: "",
+      email: email || (phone ? `${phone}@mobile.local` : ``),
+      phone: phone || "",
+      password: "",
       verified: false,
       createdAt: new Date(),
-    });
+    };
 
-    // Send OTP via selected method
-    if (body.otpMethod === "sms") {
-      await sendSMSOTP(body.phone, otp);
-    } else {
-      await sendOTPEmail(body.email, otp, body.firstName);
+    await db.saveTempUser(identifier, tempUser as any);
+
+    // Development shortcut: create user immediately and return token
+    // Only enable this shortcut when DEV_SKIP_OTP=true (defaults to false).
+    if (process.env.NODE_ENV === "development" && (process.env.DEV_SKIP_OTP || "").toLowerCase() === "true") {
+      const created = await db.createUser({
+        firstName: tempUser.firstName,
+        lastName: tempUser.lastName,
+        email: tempUser.email,
+        phone: tempUser.phone,
+        password: tempUser.password,
+        verified: true,
+        createdAt: tempUser.createdAt,
+      } as any);
+      try {
+        const { generateToken } = await import("@/lib/jwt");
+        const token = await generateToken(created.id, created.email);
+        const response = NextResponse.json({ message: "Registered (dev)", user: { id: created.id, phone: created.phone }, token }, { status: 200 });
+        response.cookies.set("auth-token", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          maxAge: 60 * 60 * 24 * 7,
+        });
+        return response;
+      } catch (e) {
+        return NextResponse.json({ message: "Registered (dev)", user: { id: created.id, phone: created.phone } }, { status: 200 });
+      }
     }
 
-    return NextResponse.json(
-      {
-        message: "Registration initiated. OTP sent to your " + body.otpMethod,
-        phone: body.phone,
-        otpMethod: body.otpMethod,
-      },
-      { status: 201 }
-    );
+    // Generate OTP and save
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await db.saveOTP(identifier, otp, email ? "email" : "sms");
+
+    // Send OTP via chosen method or default
+    if (email || method === "email") {
+      try {
+        await sendOtpEmail(email || tempUser.email, otp);
+        console.log("[REGISTER] Temp user saved and OTP emailed", { identifier, otp });
+      } catch (e) {
+        console.error("Failed to send email OTP:", e);
+      }
+    } else {
+      const phoneWithCountry = phone && phone.startsWith("+") ? phone : `+91${phone}`;
+      try {
+        await sendOtpSMS(phoneWithCountry, otp);
+        console.log("[REGISTER] Temp user saved and OTP sent via SMS", { identifier, otp });
+      } catch (e) {
+        console.error("Failed to send SMS OTP:", e);
+      }
+    }
+
+    const resp: any = { message: "OTP sent", identifier };
+    if (process.env.SHOW_DEV_OTP === "true") resp.otp = otp;
+    console.log("[DEV OTP]", { identifier, otp });
+    return NextResponse.json(resp, { status: 200 });
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error("Register error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

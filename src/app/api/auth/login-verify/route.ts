@@ -7,35 +7,26 @@ interface VerifyLoginOTPRequest {
   otp: string;
 }
 
-export async function POST() { {
+export async function POST(req: Request) {
   try {
-    const body: VerifyLoginOTPRequest = await request.json();
+    const body: VerifyLoginOTPRequest = await req.json();
 
     if (!body.phone || !body.otp) {
-      return NextResponse.json(
-        { error: "Phone and OTP are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Phone and OTP are required" }, { status: 400 });
     }
 
     // Verify OTP
     const isValidOTP = await db.verifyOTP(body.phone, body.otp);
 
     if (!isValidOTP) {
-      return NextResponse.json(
-        { error: "Invalid or expired OTP" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid or expired OTP" }, { status: 400 });
     }
 
     // Get user data
     const user = await db.getUserByPhone(body.phone);
 
     if (!user || !user.verified) {
-      return NextResponse.json(
-        { error: "User not found or not verified" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found or not verified" }, { status: 404 });
     }
 
     // Generate JWT token
@@ -68,10 +59,6 @@ export async function POST() { {
     return response;
   } catch (error) {
     console.error("Login OTP verification error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-}
 }

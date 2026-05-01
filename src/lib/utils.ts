@@ -11,3 +11,11 @@ export function formatPrice(price: number) {
     currency: 'INR',
   }).format(price);
 }
+
+export function normalizePhone(input?: string) {
+  if (!input) return "";
+  const s = input.trim();
+  const digits = s.replace(/\D/g, "");
+  if (!digits) return "";
+  return digits.length > 10 ? digits.slice(-10) : digits;
+}

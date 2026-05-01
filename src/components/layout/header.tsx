@@ -40,7 +40,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ucwLogo } from "../icons";
+import { UcwLogo } from "../icons";
 import { user } from "@/lib/data";
 import { Cart } from "../cart/cart";
 import { useCart } from "@/context/cart-context";
@@ -75,7 +75,7 @@ export function Header() {
               href="/dashboard"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <DayalLogo className="h-5 w-5 transition-all group-hover:scale-110" />
+              <UcwLogo className="h-5 w-5 transition-all group-hover:scale-110" />
               <span className="sr-only">My Order</span>
             </Link>
             {navItems.map((item) => (

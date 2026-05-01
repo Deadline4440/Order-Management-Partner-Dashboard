@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { normalizePhone } from "@/lib/utils";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,17 +28,26 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      const phoneToSend = normalizePhone(phone);
       const response = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phone }),
+        body: JSON.stringify({ phone: phoneToSend }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        // If server returned a token (development shortcut), consider login complete
+        if (data.token) {
+          setMessage("Login successful (dev). Redirecting...");
+          setTimeout(() => router.push("/dashboard"), 800);
+          return;
+        }
+
         setMessage("OTP sent successfully!");
         setStep("otp");
       } else {
@@ -58,6 +68,7 @@ export default function LoginPage() {
     try {
       const response = await fetch("/api/auth/login-verify", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
